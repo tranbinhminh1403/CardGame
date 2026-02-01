@@ -1,0 +1,158 @@
+[gd_scene load_steps=13 format=3 uid="uid://cctack103hm10"]
+
+[ext_resource type="Script" uid="uid://dy6qtwgelkwfh" path="res://scripts/card_manager.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://cl8ea7u31cob1" path="res://scripts/opp_hand.gd" id="3_eb6dy"]
+[ext_resource type="Script" uid="uid://dec4qirm0dky0" path="res://scripts/player_hand.gd" id="3_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://bx5x3ui7kim5" path="res://scenes/card_slot.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://ba7gnfapbkhhh" path="res://scenes/deck.tscn" id="4_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://bii3yife0wdir" path="res://assets/Sleeve.png" id="5_o6xl0"]
+[ext_resource type="Script" uid="uid://djr1g40o7xdnf" path="res://scripts/deck.gd" id="5_tbgi4"]
+[ext_resource type="Script" uid="uid://d2pf4s8qup471" path="res://scripts/input_manager.gd" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://bu3cbkpcgensx" path="res://scripts/opp_deck.gd" id="6_trceg"]
+[ext_resource type="Script" uid="uid://ddinb82ljo8ys" path="res://scripts/magic_card_slot.gd" id="8_tipki"]
+[ext_resource type="PackedScene" uid="uid://ulbxsa8osjky" path="res://scenes/opp_card_slot.tscn" id="9_85g3d"]
+[ext_resource type="Script" uid="uid://cx555w67amjta" path="res://scripts/battle_manager.gd" id="10_choun"]
+
+[node name="Main" type="Node2D"]
+
+[node name="CardManager" type="Node2D" parent="."]
+script = ExtResource("1_0wfyh")
+
+[node name="PlayerHand" type="Node2D" parent="."]
+script = ExtResource("3_jyhfs")
+
+[node name="OppHand" type="Node2D" parent="."]
+script = ExtResource("3_eb6dy")
+
+[node name="PlayerDeck" parent="." instance=ExtResource("4_jyhfs")]
+position = Vector2(150, 980)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("5_tbgi4")
+
+[node name="OppDeck" type="Node2D" parent="."]
+position = Vector2(1800, 100)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("6_trceg")
+
+[node name="SleeveImg" type="Sprite2D" parent="OppDeck"]
+z_index = -1
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_o6xl0")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="OppDeck"]
+offset_left = -40.0
+offset_top = -40.0
+scale = Vector2(2, 2)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InputManager" type="Node2D" parent="."]
+script = ExtResource("6_tefeu")
+
+[node name="CardField" type="Node2D" parent="."]
+
+[node name="PlayerField" type="Node2D" parent="CardField"]
+
+[node name="Front1" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(680, 620)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front2" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(820, 620)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front3" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(960, 620)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front4" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(1100, 620)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front5" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(1240, 620)
+scale = Vector2(0.8, 0.8)
+
+[node name="Back1" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(680, 800)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("8_tipki")
+
+[node name="Back2" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(820, 800)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("8_tipki")
+
+[node name="Back3" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(960, 800)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("8_tipki")
+
+[node name="Back4" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(1100, 800)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("8_tipki")
+
+[node name="Back5" parent="CardField/PlayerField" instance=ExtResource("3_sugp2")]
+position = Vector2(1240, 800)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("8_tipki")
+
+[node name="OppField" type="Node2D" parent="CardField"]
+
+[node name="Front1" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(680, 400)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front2" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(820, 400)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front3" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(960, 400)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front4" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(1100, 400)
+scale = Vector2(0.8, 0.8)
+
+[node name="Front5" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(1240, 400)
+scale = Vector2(0.8, 0.8)
+
+[node name="CardSlot6" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(680, 220)
+scale = Vector2(0.8, 0.8)
+
+[node name="CardSlot7" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(820, 220)
+scale = Vector2(0.8, 0.8)
+
+[node name="CardSlot8" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(960, 220)
+scale = Vector2(0.8, 0.8)
+
+[node name="CardSlot9" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(1100, 220)
+scale = Vector2(0.8, 0.8)
+
+[node name="CardSlot10" parent="CardField/OppField" instance=ExtResource("9_85g3d")]
+position = Vector2(1240, 220)
+scale = Vector2(0.8, 0.8)
+
+[node name="EndTurn" type="Button" parent="."]
+offset_left = 450.0
+offset_top = 700.0
+offset_right = 528.0
+offset_bottom = 731.0
+text = "End Turn
+"
+
+[node name="BattleManager" type="Node" parent="."]
+script = ExtResource("10_choun")
+
+[node name="BattleTimer" type="Timer" parent="."]
+
+[connection signal="pressed" from="EndTurn" to="CardManager" method="_on_end_turn_pressed"]
+[connection signal="pressed" from="EndTurn" to="BattleManager" method="_on_end_turn_pressed"]

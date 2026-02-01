@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://ba7gnfapbkhhh"]
+
+[ext_resource type="Texture2D" uid="uid://bii3yife0wdir" path="res://assets/Sleeve.png" id="1_sdhao"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tbgi4"]
+size = Vector2(136, 180)
+
+[node name="Deck" type="Node2D"]
+
+[node name="SleeveImg" type="Sprite2D" parent="."]
+z_index = -1
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_sdhao")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_tbgi4")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = -40.0
+offset_top = -40.0
+scale = Vector2(2, 2)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
