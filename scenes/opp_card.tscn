@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://blfgdah76m46a"]
+[gd_scene load_steps=9 format=3 uid="uid://blfgdah76m46a"]
 
 [ext_resource type="Script" uid="uid://d0oe3ary6wsoj" path="res://scripts/opp_card.gd" id="1_ui5ms"]
 [ext_resource type="Texture2D" uid="uid://bii3yife0wdir" path="res://assets/Sleeve.png" id="2_dgdfv"]
@@ -210,6 +210,9 @@ _data = {
 &"card_flip": SubResource("Animation_kg30u")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ui5ms"]
+size = Vector2(135, 179.99997)
+
 [node name="Card" type="Node2D"]
 position = Vector2(520, 220)
 scale = Vector2(0.8, 0.8)
@@ -258,3 +261,12 @@ vertical_alignment = 1
 libraries = {
 &"": SubResource("AnimationLibrary_sy11y")
 }
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 3.0517578e-05)
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_ui5ms")

@@ -17,6 +17,7 @@ var player_health
 var opp_health
 
 var is_opp_turn = false
+var is_player_attacking = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -83,6 +84,9 @@ func direct_attack(attacking_card, attacker):
 	if attacker == "Opponent":
 		new_pos_y = 1080
 	else:
+		$"../GameHUD/EndTurn".disabled = true
+		#$"../GameHUD/EndTurn".visible = false
+		is_player_attacking = true
 		new_pos_y = 0
 		player_cards_that_attacked_this_turn.append(attacking_card)
 	#var new_pos = Vector2(attacking_card.position.x, new_pos_y)
@@ -110,9 +114,17 @@ func direct_attack(attacking_card, attacker):
 	attacking_card.z_index = 0
 	
 	await wait(1.0)
+	if attacker == "Player":
+		is_player_attacking = false
+		$"../GameHUD/EndTurn".disabled = false
+		#$"../GameHUD/EndTurn".visible = true
 
 func attack(attacking_card, defending_card, attacker):
 	if attacker == "Player":
+		$"../GameHUD/EndTurn".disabled = true
+		#$"../GameHUD/EndTurn".visible = false
+		is_player_attacking = true
+		$"../CardManager".selected_monster = null
 		player_cards_that_attacked_this_turn.append(attacking_card)
 	attacking_card.z_index = 5
 	var new_pos = Vector2(defending_card.position.x, defending_card.position.y)
@@ -147,6 +159,11 @@ func attack(attacking_card, defending_card, attacker):
 		card_was_destroy = true
 	if card_was_destroy:
 		await wait(1.0)
+	
+	if attacker == "Player":
+		is_player_attacking = false
+		$"../GameHUD/EndTurn".disabled = false
+		#$"../GameHUD/EndTurn".visible = true
 
 func destroy_card(card, card_owner):
 	var new_pos
@@ -156,16 +173,25 @@ func destroy_card(card, card_owner):
 		if card in player_cards_on_battlefield:
 			player_cards_on_battlefield.erase(card)
 		card.is_in_slot.get_node("Area2D/CollisionShape2D").disabled = false
+		card.is_in_slot.card_in_slot = false
+		card.is_in_slot = null
 
 	else:
 		new_pos = $"../OppDiscard".position
 		if card in opp_cards_on_battlefield:
 			opp_cards_on_battlefield.erase(card)
 	
-	card.is_in_slot.card_in_slot = false
-	card.is_in_slot = null
+
 	var tween = get_tree().create_tween()
 	tween.tween_property(card, "position", new_pos, CARD_MOVE_SPEED)
+
+func opp_card_selected(defending_card):
+	var attacking_card = $"../CardManager".selected_monster
+	if attacking_card:
+		if defending_card in opp_cards_on_battlefield:
+			if is_player_attacking == false:
+				$"../CardManager".selected_monster = null
+				attack(attacking_card, defending_card, "Player")
 
 func opp_play_card():
 	# get random empty card slot

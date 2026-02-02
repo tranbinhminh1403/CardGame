@@ -147,13 +147,14 @@ func reset_played_monster():
 func card_clicked(card):
 	if card.is_in_slot:
 		# on field
-		if $"../BattleManager".is_opp_turn:
-			if card not in $"../BattleManager".player_cards_that_attacked_this_turn:
-				if $"../BattleManager".opp_cards_on_battlefield.size() == 0:
-					$"../BattleManager".direct_attack(card, "Player")
-					return
-				else:
-					select_card_for_battle(card)
+		if !$"../BattleManager".is_opp_turn:
+			if $"../BattleManager".is_player_attacking == false:
+				if card not in $"../BattleManager".player_cards_that_attacked_this_turn:
+					if $"../BattleManager".opp_cards_on_battlefield.size() == 0:
+						$"../BattleManager".direct_attack(card, "Player")
+						return
+					else:
+						select_card_for_battle(card)
 	else:
 		start_drag(card)
 
@@ -173,5 +174,5 @@ func select_card_for_battle(card):
 
 func unselected_selected_monster():
 	if selected_monster:
-		selected_monster.position.y -= 20
+		selected_monster.position.y += 20
 		selected_monster = null

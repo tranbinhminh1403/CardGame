@@ -2,6 +2,7 @@ extends Node2D
 
 const COLLISION_MASK_CARD = 1
 const COLLISION_MASK_DECK = 4
+const COLLISION_MASK_OPP_CARD = 8
 
 var card_manager_ref
 var deck_ref
@@ -39,4 +40,5 @@ func raycast_at_cursor():
 		elif result_collision_mask == COLLISION_MASK_DECK:
 			# deck click
 			deck_ref.draw_card()
-			
+		elif result_collision_mask == COLLISION_MASK_OPP_CARD:
+			$"../BattleManager".opp_card_selected(result[0].collider.get_parent())
