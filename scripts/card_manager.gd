@@ -5,7 +5,7 @@ const COLLISION_MASK_CARD_SLOT = 2
 const DEFAULT_CARD_MOVE_SPEED = 0.1
 
 const DEFAULT_CARD_SCALE = 0.85
-const CARD_LARGE_SCALE = 0.9
+const CARD_LARGE_SCALE = 1
 const CARD_SMALL_SCALE = 0.85
 
 
@@ -15,6 +15,7 @@ var is_hovering_on_card
 var player_hand_ref
 
 var played_monster_this_turn = false
+var selected_monster
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -59,10 +60,12 @@ func finish_drag():
 				# stay in EMPTY slot
 				card_being_dragged.position = card_slot_found.position
 				#### in case not want to change card slot 
-				card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+				#card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 				####
 				# switch to state if there is already card in slot, have o be change in case allowing move card between slot
 				card_slot_found.card_in_slot = true
+				card_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
+				$"../BattleManager".player_cards_on_battlefield.append(card_being_dragged)
 				card_being_dragged = null
 				return
 	player_hand_ref.add_card_to_hand(card_being_dragged, DEFAULT_CARD_MOVE_SPEED)
@@ -115,6 +118,8 @@ func connect_card_signals(card: Node2D):
 	card.connect("hovered_off", on_hovered_off_card)
 
 func on_hovered_over_card(card: Node2D):
+	if card.is_in_slot:
+		return
 	if !is_hovering_on_card:
 		is_hovering_on_card = true
 		highlight_card(card, true)
@@ -138,3 +143,35 @@ func _on_end_turn_pressed() -> void:
 
 func reset_played_monster():
 	played_monster_this_turn = false
+
+func card_clicked(card):
+	if card.is_in_slot:
+		# on field
+		if $"../BattleManager".is_opp_turn:
+			if card not in $"../BattleManager".player_cards_that_attacked_this_turn:
+				if $"../BattleManager".opp_cards_on_battlefield.size() == 0:
+					$"../BattleManager".direct_attack(card, "Player")
+					return
+				else:
+					select_card_for_battle(card)
+	else:
+		start_drag(card)
+
+func select_card_for_battle(card):
+	# toggle select monster
+	if selected_monster:
+		if selected_monster == card:
+			card.position.y += 20
+			selected_monster = null
+		else:
+			selected_monster.position.y += 20
+			selected_monster = card
+			card.position.y -= 20
+	else:
+		selected_monster = card
+		card.position.y -= 20
+
+func unselected_selected_monster():
+	if selected_monster:
+		selected_monster.position.y -= 20
+		selected_monster = null

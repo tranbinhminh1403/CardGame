@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cctack103hm10"]
+[gd_scene load_steps=14 format=3 uid="uid://cctack103hm10"]
 
 [ext_resource type="Script" uid="uid://dy6qtwgelkwfh" path="res://scripts/card_manager.gd" id="1_0wfyh"]
 [ext_resource type="Script" uid="uid://cl8ea7u31cob1" path="res://scripts/opp_hand.gd" id="3_eb6dy"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://ddinb82ljo8ys" path="res://scripts/magic_card_slot.gd" id="8_tipki"]
 [ext_resource type="PackedScene" uid="uid://ulbxsa8osjky" path="res://scenes/opp_card_slot.tscn" id="9_85g3d"]
 [ext_resource type="Script" uid="uid://cx555w67amjta" path="res://scripts/battle_manager.gd" id="10_choun"]
+[ext_resource type="Texture2D" uid="uid://br5tew60pfd8h" path="res://assets/CardSlot.png" id="13_trceg"]
 
 [node name="Main" type="Node2D"]
 
@@ -25,12 +26,12 @@ script = ExtResource("3_jyhfs")
 script = ExtResource("3_eb6dy")
 
 [node name="PlayerDeck" parent="." instance=ExtResource("4_jyhfs")]
-position = Vector2(150, 980)
+position = Vector2(1400, 800)
 scale = Vector2(0.8, 0.8)
 script = ExtResource("5_tbgi4")
 
 [node name="OppDeck" type="Node2D" parent="."]
-position = Vector2(1800, 100)
+position = Vector2(520, 220)
 scale = Vector2(0.8, 0.8)
 script = ExtResource("6_trceg")
 
@@ -141,18 +142,64 @@ scale = Vector2(0.8, 0.8)
 position = Vector2(1240, 220)
 scale = Vector2(0.8, 0.8)
 
-[node name="EndTurn" type="Button" parent="."]
-offset_left = 450.0
-offset_top = 700.0
-offset_right = 528.0
-offset_bottom = 731.0
-text = "End Turn
-"
-
 [node name="BattleManager" type="Node" parent="."]
 script = ExtResource("10_choun")
 
 [node name="BattleTimer" type="Timer" parent="."]
 
-[connection signal="pressed" from="EndTurn" to="CardManager" method="_on_end_turn_pressed"]
-[connection signal="pressed" from="EndTurn" to="BattleManager" method="_on_end_turn_pressed"]
+[node name="GameHUD" type="Node" parent="."]
+
+[node name="Health" type="Panel" parent="GameHUD"]
+offset_left = 49.0
+offset_top = 330.0
+offset_right = 359.0
+offset_bottom = 702.0
+
+[node name="PlayerHealth" type="RichTextLabel" parent="GameHUD/Health"]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 247.0
+offset_right = 158.0
+offset_bottom = 287.0
+scale = Vector2(2, 2)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OppHealth" type="RichTextLabel" parent="GameHUD/Health"]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 61.0
+offset_right = 158.0
+offset_bottom = 101.0
+scale = Vector2(2, 2)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndTurn" type="Button" parent="GameHUD"]
+offset_left = 1339.0
+offset_top = 490.0
+offset_right = 1417.0
+offset_bottom = 521.0
+text = "End Turn
+"
+
+[node name="PlayerDiscard" type="Node2D" parent="."]
+position = Vector2(1400, 620)
+scale = Vector2(0.8, 0.8)
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerDiscard"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("13_trceg")
+
+[node name="OppDiscard" type="Node2D" parent="."]
+position = Vector2(520, 400)
+scale = Vector2(0.8, 0.8)
+
+[node name="Sprite2D" type="Sprite2D" parent="OppDiscard"]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("13_trceg")
+
+[connection signal="pressed" from="GameHUD/EndTurn" to="CardManager" method="_on_end_turn_pressed"]
+[connection signal="pressed" from="GameHUD/EndTurn" to="BattleManager" method="_on_end_turn_pressed"]

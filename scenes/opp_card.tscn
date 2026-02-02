@@ -211,7 +211,7 @@ _data = {
 }
 
 [node name="Card" type="Node2D"]
-position = Vector2(1800, 100)
+position = Vector2(520, 220)
 scale = Vector2(0.8, 0.8)
 script = ExtResource("1_ui5ms")
 

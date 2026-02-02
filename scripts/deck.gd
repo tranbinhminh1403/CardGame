@@ -4,7 +4,7 @@ const CARD_DRAW_SPEED = 0.2
 const CARD_SCENE_PATH = "res://scenes/card.tscn"
 const STARTING_HAND_SIZE = 5
 
-var player_deck = ["Golshi", "Tachyon", "Tachyon", "Stego", "Teio", "Tachyon", "Tachyon", "Tachyon"]
+var player_deck = ["Golshi", "Tachyon", "Tachyon", "Stego", "Teio", "Tachyon", "Stego", "Stego"]
 var card_db_ref
 var drawn_card_this_turn = false
 
