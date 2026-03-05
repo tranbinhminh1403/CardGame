@@ -7,6 +7,8 @@ const COLLISION_MASK_OPP_CARD = 8
 var card_manager_ref
 var deck_ref
 
+var input_disabled = false
+
 signal left_mouse_button_clicked
 signal left_mouse_button_released
 
@@ -23,6 +25,8 @@ func _input(event: InputEvent) -> void:
 			emit_signal("left_mouse_button_released")
 
 func raycast_at_cursor():
+	if input_disabled:
+		return
 	var space_state = get_world_2d().direct_space_state
 	var parameters = PhysicsPointQueryParameters2D.new()
 	parameters.position = get_global_mouse_position()

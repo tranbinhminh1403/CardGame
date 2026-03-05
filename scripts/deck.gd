@@ -4,7 +4,7 @@ const CARD_DRAW_SPEED = 0.2
 const CARD_SCENE_PATH = "res://scenes/card.tscn"
 const STARTING_HAND_SIZE = 5
 
-var player_deck = ["Golshi", "Tachyon", "Tachyon", "Stego", "Teio", "Tachyon", "Stego", "Stego"]
+var player_deck = ["Golshi", "Tachyon", "Tachyon", "Stego", "Teio", "Tachyon", "Stego", "Stego", "Zephyr_Magic"]
 var card_db_ref
 var drawn_card_this_turn = false
 
@@ -40,14 +40,28 @@ func draw_card():
 	# set card img
 	var card_img_path = str("res://assets/CardsImg/" + card_drawn_name + ".png")
 	new_card.get_node("CardImg").texture = load(card_img_path)
-	# set card stats
-	new_card.attack = card_db_ref.CARDS[card_drawn_name][0]
-	new_card.health = card_db_ref.CARDS[card_drawn_name][1]
-	var card_stats = new_card.get_node("Stats")
-	card_stats.get_node("Attack").text = str(new_card.attack)
-	card_stats.get_node("Health").text = str(new_card.health)
+
 	# get card type
 	new_card.card_type = card_db_ref.CARDS[card_drawn_name][2]
+	if new_card.card_type == "Monster":
+		# set card stats
+		new_card.attack = card_db_ref.CARDS[card_drawn_name][0]
+		new_card.health = card_db_ref.CARDS[card_drawn_name][1]
+		var card_stats = new_card.get_node("Stats")
+		card_stats.get_node("Attack").text = str(new_card.attack)
+		card_stats.get_node("Health").text = str(new_card.health)
+		card_stats.get_node("Ability").visible = false
+	else:
+		var card_stats = new_card.get_node("Stats")
+		new_card.ability = card_db_ref.CARDS[card_drawn_name][3]
+		
+		card_stats.get_node("Attack").visible = false
+		card_stats.get_node("Health").visible = false
+		card_stats.get_node("Ability").text = str(new_card.ability)
+		var new_card_ability_script_path = card_db_ref.CARDS[card_drawn_name][4]
+		if new_card_ability_script_path:
+			new_card.ability_script = load(new_card_ability_script_path).new()
+
 	$"../CardManager".add_child(new_card)
 	new_card.name = "Card"
 	$"../PlayerHand".add_card_to_hand(new_card, CARD_DRAW_SPEED)

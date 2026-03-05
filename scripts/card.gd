@@ -9,6 +9,9 @@ var is_in_slot
 var card_type
 var attack
 var health
+var ability
+var ability_script
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_parent().connect_card_signals(self)

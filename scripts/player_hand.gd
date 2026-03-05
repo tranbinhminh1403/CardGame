@@ -12,14 +12,12 @@ var player_hand = []
 func _ready() -> void:
 	center_screen_x = get_viewport().size.x / 2
 
-
 func add_card_to_hand(card, speed):
 	if card not in player_hand:
 		player_hand.insert(0, card)
 		update_hand_position(speed)
 	else:
 		animate_card_to_position(card, card.starting_position, DEFAULT_CARD_MOVE_SPEED)
-
 
 func remove_card_from_hand(card):
 	if card in player_hand:

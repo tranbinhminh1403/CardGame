@@ -17,7 +17,7 @@ var player_health
 var opp_health
 
 var is_opp_turn = false
-var is_player_attacking = false
+#var is_player_attacking = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -84,9 +84,10 @@ func direct_attack(attacking_card, attacker):
 	if attacker == "Opponent":
 		new_pos_y = 1080
 	else:
-		$"../GameHUD/EndTurn".disabled = true
-		#$"../GameHUD/EndTurn".visible = false
-		is_player_attacking = true
+		$"../InputManager".input_disabled = true
+		enable_end_turn_button(false)
+		#$"../GameHUD/EndTurn".disabled = true
+		##$"../GameHUD/EndTurn".visible = false
 		new_pos_y = 0
 		player_cards_that_attacked_this_turn.append(attacking_card)
 	#var new_pos = Vector2(attacking_card.position.x, new_pos_y)
@@ -115,15 +116,17 @@ func direct_attack(attacking_card, attacker):
 	
 	await wait(1.0)
 	if attacker == "Player":
-		is_player_attacking = false
-		$"../GameHUD/EndTurn".disabled = false
-		#$"../GameHUD/EndTurn".visible = true
+		$"../InputManager".input_disabled = false
+		enable_end_turn_button(true)
+		#$"../GameHUD/EndTurn".disabled = false
+		##$"../GameHUD/EndTurn".visible = true
 
 func attack(attacking_card, defending_card, attacker):
 	if attacker == "Player":
-		$"../GameHUD/EndTurn".disabled = true
-		#$"../GameHUD/EndTurn".visible = false
-		is_player_attacking = true
+		$"../InputManager".input_disabled = true
+		enable_end_turn_button(false)
+		#$"../GameHUD/EndTurn".disabled = true
+		##$"../GameHUD/EndTurn".visible = false
 		$"../CardManager".selected_monster = null
 		player_cards_that_attacked_this_turn.append(attacking_card)
 	attacking_card.z_index = 5
@@ -161,9 +164,10 @@ func attack(attacking_card, defending_card, attacker):
 		await wait(1.0)
 	
 	if attacker == "Player":
-		is_player_attacking = false
-		$"../GameHUD/EndTurn".disabled = false
-		#$"../GameHUD/EndTurn".visible = true
+		$"../InputManager".input_disabled = false
+		enable_end_turn_button(true)
+		#$"../GameHUD/EndTurn".disabled = false
+		##$"../GameHUD/EndTurn".visible = true
 
 func destroy_card(card, card_owner):
 	var new_pos
@@ -189,7 +193,7 @@ func opp_card_selected(defending_card):
 	var attacking_card = $"../CardManager".selected_monster
 	if attacking_card:
 		if defending_card in opp_cards_on_battlefield:
-			if is_player_attacking == false:
+			if $"../InputManager".input_disabled == false:
 				$"../CardManager".selected_monster = null
 				attack(attacking_card, defending_card, "Player")
 
@@ -226,3 +230,11 @@ func end_opponent_turn():
 	$"../PlayerDeck".reset_draw()
 	$"../CardManager".reset_played_monster()
 	is_opp_turn = false
+
+func enable_end_turn_button(is_enabled):
+	if is_enabled:
+		$"../GameHUD/EndTurn".disabled = false
+		$"../GameHUD/EndTurn".visible = true
+	else:
+		$"../GameHUD/EndTurn".disabled = true
+		$"../GameHUD/EndTurn".visible = false

@@ -48,26 +48,35 @@ func finish_drag():
 	var card_slot_found = raycast_check_slot()
 	if card_slot_found and not card_slot_found.card_in_slot:
 		if card_being_dragged.card_type == card_slot_found.card_slot_type:
-			if !played_monster_this_turn:
-				played_monster_this_turn = true
-				card_being_dragged.scale = Vector2(CARD_SMALL_SCALE, CARD_SMALL_SCALE)
-				card_being_dragged.z_index = 0
-				card_slot_found.z_index = -1
-				is_hovering_on_card = false
-				card_being_dragged.is_in_slot = card_slot_found
-				# remove card from hand
-				player_hand_ref.remove_card_from_hand(card_being_dragged)
-				# stay in EMPTY slot
-				card_being_dragged.position = card_slot_found.position
-				#### in case not want to change card slot 
-				#card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
-				####
-				# switch to state if there is already card in slot, have o be change in case allowing move card between slot
-				card_slot_found.card_in_slot = true
-				card_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
-				$"../BattleManager".player_cards_on_battlefield.append(card_being_dragged)
+			if card_being_dragged.card_type == "Monster" && played_monster_this_turn:
+				player_hand_ref.add_card_to_hand(card_being_dragged, DEFAULT_CARD_MOVE_SPEED)
 				card_being_dragged = null
 				return
+			
+			card_being_dragged.scale = Vector2(CARD_SMALL_SCALE, CARD_SMALL_SCALE)
+			card_being_dragged.z_index = 0
+			card_slot_found.z_index = -1
+			is_hovering_on_card = false
+			card_being_dragged.is_in_slot = card_slot_found
+			# remove card from hand
+			player_hand_ref.remove_card_from_hand(card_being_dragged)
+			# stay in EMPTY slot
+			card_being_dragged.position = card_slot_found.position
+			#### in case not want to change card slot 
+			#card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+			####
+			# switch to state if there is already card in slot, have o be change in case allowing move card between slot
+			card_slot_found.card_in_slot = true
+			card_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
+			
+			if card_being_dragged.card_type == "Monster":
+				$"../BattleManager".player_cards_on_battlefield.append(card_being_dragged)
+				played_monster_this_turn = true
+			else:
+				card_being_dragged.ability_script.trigger_ability($"../BattleManager", card_being_dragged, $"../InputManager")
+			card_being_dragged = null
+			
+			return
 	player_hand_ref.add_card_to_hand(card_being_dragged, DEFAULT_CARD_MOVE_SPEED)
 	card_being_dragged = null
 
@@ -106,6 +115,9 @@ func raycast_check_slot():
 	return null
 
 func highlight_card(card: Node2D, hovered: bool):
+	if card.is_in_slot:
+		return
+	
 	if hovered:
 		card.scale = Vector2(CARD_LARGE_SCALE, CARD_LARGE_SCALE)
 		card.z_index = 2
@@ -147,14 +159,22 @@ func reset_played_monster():
 func card_clicked(card):
 	if card.is_in_slot:
 		# on field
-		if !$"../BattleManager".is_opp_turn:
-			if $"../BattleManager".is_player_attacking == false:
-				if card not in $"../BattleManager".player_cards_that_attacked_this_turn:
-					if $"../BattleManager".opp_cards_on_battlefield.size() == 0:
-						$"../BattleManager".direct_attack(card, "Player")
-						return
-					else:
-						select_card_for_battle(card)
+		if $"../BattleManager".is_opp_turn:
+			return
+		#if $"../BattleManager".is_player_attacking:
+			#return
+			
+		if card in $"../BattleManager".player_cards_that_attacked_this_turn:
+			return
+		
+		if card.card_type != "Monster":
+			return
+			
+		if $"../BattleManager".opp_cards_on_battlefield.size() == 0:
+			$"../BattleManager".direct_attack(card, "Player")
+			#return
+		else:
+			select_card_for_battle(card)
 	else:
 		start_drag(card)
 
